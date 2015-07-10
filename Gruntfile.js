@@ -164,6 +164,11 @@ module.exports = function (grunt) {
         src: ['<%= config.app %>/index.html'],
         exclude: ['bootstrap.js'],
         ignorePath: /^<%= config.app %>\/|\.\.\//
+      },
+      dist: {
+        src: ['<%= config.dist %>/index.html'],
+        exclude: ['bootstrap.js'],
+        ignorePath: /\/|\.\.\//
       }
     },
 
@@ -295,6 +300,13 @@ module.exports = function (grunt) {
           cwd: 'bower_components/bootstrap/dist',
           src: 'fonts/*',
           dest: '<%= config.dist %>'
+        },
+        {
+            expand: true,
+            dot: true,
+            cwd: 'bower_components/components-font-awesome',
+            src: ['fonts/*.*'],
+            dest: '<%= config.dist %>'
         }]
       },
       styles: {
@@ -348,7 +360,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
-      'wiredep',
+      'wiredep:app',
       'concurrent:server',
       'postcss',
       'browserSync:livereload',
@@ -378,7 +390,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'wiredep',
+    'wiredep:dist',
     'useminPrepare',
     'concurrent:dist',
     'postcss',
@@ -386,7 +398,6 @@ module.exports = function (grunt) {
     'cssmin',
     'uglify',
     'copy:dist',
-    'modernizr',
     'filerev',
     'usemin',
     'htmlmin'
